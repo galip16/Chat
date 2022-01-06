@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { Avatar, Title, Subheading, Button } from "react-native-paper";
-import firebase from "firebase/app";
 
 const Settings = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      setName(user?.displayName ?? "");
-      setEmail(user?.email ?? "");
-    });
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <View style={{ alignItems: "center", marginTop: 16 }}>
@@ -21,7 +15,7 @@ const Settings = () => {
       />
       <Title>{name}</Title>
       <Subheading>{email}</Subheading>
-      <Button onPress={() => firebase.auth().signOut()}>Sign Out</Button>
+      <Button onPress={() => console.warning("Sign Out")}>Sign Out</Button>
     </View>
   );
 };

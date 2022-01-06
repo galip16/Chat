@@ -10,7 +10,6 @@ import {
   Button,
   TextInput,
 } from "react-native-paper";
-import firebase from "firebase/app";
 import { useNavigation } from "@react-navigation/core";
 
 const ChatList = () => {
@@ -20,9 +19,7 @@ const ChatList = () => {
   const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      setEmail(user?.email ?? "");
-    });
+    console.log("list mi");
   }, []);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -30,28 +27,14 @@ const ChatList = () => {
   const navigation = useNavigation();
 
   const createChat = async () => {
-    if (!email || !userEmail) return;
-    setIsLoading(true);
-    const response = await firebase
-      .firestore()
-      .collection("chats")
-      .add({
-        users: [email, userEmail],
-      });
-    setIsLoading(false);
-    setIsDialogVisible(false);
-    navigation.navigate("Chat", { chatId: response.id });
+    const a = "buralara bir bak";
+    console.log(a);
   };
 
   const [chats, setChats] = useState([]);
   useEffect(() => {
-    return firebase?.firestore()
-      .collection("chats")
-      .where("users", "array-contains", email)
-      .onSnapshot((querySnapshot) => {
-        setChats(querySnapshot.docs);
-      });
-  }, [email]);
+    console.log("asdasd");
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>

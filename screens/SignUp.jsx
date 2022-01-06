@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import firebase from "firebase/app";
 import { useNavigation } from "@react-navigation/native";
 
 const SignUp = () => {
@@ -17,11 +16,7 @@ const SignUp = () => {
   const createAccount = async () => {
     setIsLoading(true);
     try {
-      const response = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
-      await response.user.updateProfile({ displayName: name });
-      navigation.popToTop();
+      console.log("sfdfsdf");
     } catch (e) {
       setIsLoading(false);
       setError(e.message);

@@ -10,28 +10,9 @@ import SignIn from "./screens/SignIn";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { Provider, DefaultTheme } from "react-native-paper";
-import firebase from 'firebase/app'
-import "firebase/auth";
-import "firebase/firestore";
 import { AppRegistry, Platform } from 'react-native';
 
-
-
 AppRegistry.registerComponent('chat', () => App);
-
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDh6mlbC7OaTieaH_Lpf53k1L5qx85y2kE",
-  authDomain: "chat-app-179b6.firebaseapp.com",
-  projectId: "chat-app-179b6",
-  storageBucket: "chat-app-179b6.appspot.com",
-  messagingSenderId: "460945098508",
-  appId: "1:460945098508:web:4dccfb0b066e541f34eb29"
-};
-
-if (!firebase == undefined) {
-  firebase.initializeApp(firebaseConfig);
-}
 
 
 
@@ -45,11 +26,7 @@ const Tabs = createBottomTabNavigator();
 const TabsNavigator = () => {
   const navigation = useNavigation();
   useEffect(() => {
-    firebase?.auth().onAuthStateChanged((user) => {
-      if (!user) {
-        navigation.navigate("SignUp");
-      }
-    });
+   console.log("burasi ne?");
   }, []);
 
   return (
