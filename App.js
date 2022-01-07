@@ -25,8 +25,13 @@ const Tabs = createBottomTabNavigator();
 
 const TabsNavigator = () => {
   const navigation = useNavigation();
+
   useEffect(() => {
-   console.log("burasi ne?");
+    const isLoggedIn = false;
+    if (!isLoggedIn) {
+      navigation.navigate("SignUp")
+
+    }
   }, []);
 
   return (

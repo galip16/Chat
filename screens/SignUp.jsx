@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { View, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { useQuery, gql, useMutation } from "@apollo/client"
+
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -11,17 +13,26 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const variables = {
+    name: name,
+    email: email,
+    password: password,
+  };
+
+  const [createAccount] = useMutation(ADD_ANIMAL_MUTATION);
+
+
   const navigation = useNavigation();
 
-  const createAccount = async () => {
-    setIsLoading(true);
-    try {
-      console.log("sfdfsdf");
-    } catch (e) {
-      setIsLoading(false);
-      setError(e.message);
-    }
-  };
+  // const createAccount = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     //database e user kaydi yapilacak,
+  //   } catch (e) {
+  //     setIsLoading(false);
+  //     setError(e.message);
+  //   }
+  // };
   return (
     <View style={{ margin: 16 }}>
       {!!error && (
@@ -62,7 +73,7 @@ const SignUp = () => {
         </Button>
         <Button
           mode="contained"
-          onPress={() => createAccount()}
+          onPress={() => createAccount({ variables: variables })}
           loading={isLoading}
         >
           Sign Up

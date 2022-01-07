@@ -16,6 +16,7 @@
     "@babel/preset-env": "^7.16.7"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.6",
     "apollo-server-core": "^3.6.1",
     "apollo-server-express": "^3.6.1",
     "express": "^4.17.2",
