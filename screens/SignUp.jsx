@@ -2,16 +2,12 @@ import React, { useState } from "react";
 import { View, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery, gql, useMutation } from "@apollo/client"
-
+import { useQuery, gql, useMutation } from "@apollo/client";
 
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const variables = {
     name: name,
@@ -19,20 +15,24 @@ const SignUp = () => {
     password: password,
   };
 
-  const [createAccount] = useMutation(ADD_ANIMAL_MUTATION);
+  const ADD_USER_MUTATION = gql`
+    mutation ($name: String!, $email: String!, $password: String!) {
+      createAUser(name: $name, email: $email, password: $password) {
+        id
+        name
+        email
+      }
+    }
+  `;
 
+  const [createAUser, { data, loading, error }] =
+    useMutation(ADD_USER_MUTATION);
 
   const navigation = useNavigation();
 
-  // const createAccount = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     //database e user kaydi yapilacak,
-  //   } catch (e) {
-  //     setIsLoading(false);
-  //     setError(e.message);
-  //   }
-  // };
+  if (loading) return <Text>Submitting...</Text>;
+  if (error) return <Text> {`Error! : ${error.message}`} </Text>;
+
   return (
     <View style={{ margin: 16 }}>
       {!!error && (
@@ -73,8 +73,10 @@ const SignUp = () => {
         </Button>
         <Button
           mode="contained"
-          onPress={() => createAccount({ variables: variables })}
-          loading={isLoading}
+          onPress={() => {
+            createAUser({ variables: variables });
+            navigation.popToTop();
+          }}
         >
           Sign Up
         </Button>

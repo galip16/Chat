@@ -1,21 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Text, View } from "react-native";
 import { Avatar, Title, Subheading, Button } from "react-native-paper";
+import { useQuery, gql } from "@apollo/client";
 
 const Settings = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const CHATS_QUERY = gql`
+    {
+      users {
+        name
+        email
+        id
+        password
+      }
+    }
+  `;
 
-  useEffect(() => {}, []);
+  const { loading, error, data } = useQuery(CHATS_QUERY);
+
+  if (loading) return <Text>Still Loading</Text>;
+  if (error) return <Text>{error.message}</Text>;
 
   return (
     <View style={{ alignItems: "center", marginTop: 16 }}>
       <Avatar.Text
-        label={name.split(" ").reduce((prev, current) => prev + current[0], "")}
+        label={data.users[0].name
+          .split(" ")
+          .reduce((prev, current) => prev + current[0], "")}
       />
-      <Title>{name}</Title>
-      <Subheading>{email}</Subheading>
-      <Button onPress={() => console.warning("Sign Out")}>Sign Out</Button>
+      <Title>{data.users[0].name}</Title>
+      <Subheading>{data.users[0].email}</Subheading>
+      <Button onPress={() => console.warn("You are successfully signed out")}>
+        Sign Out
+      </Button>
     </View>
   );
 };

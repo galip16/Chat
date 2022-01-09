@@ -6,7 +6,8 @@ import { User } from "./models/User";
 export const resolvers = {
     Query: {
         hello: () => "hi",
-        cats: async () => await Cat.find()
+        cats: async () => await Cat.find(),
+        users:async () => await User.find()
     },
 
     Mutation: {

@@ -6,6 +6,7 @@ export const typeDefs = gql`
 type Query {
     hello:String!
     cats:[Cat!]!
+    users:[User!]!
 }
 
 type Cat {

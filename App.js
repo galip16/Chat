@@ -1,22 +1,29 @@
-import React, { useEffect } from "react";
+import * as React from "react";
+import { useEffect } from "react";
 import { Text } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
+import { Provider, DefaultTheme } from "react-native-paper";
+import { AppRegistry } from 'react-native';
+import { ApolloClient, InMemoryCache, ApolloProvider, gql, useQuery } from "@apollo/client";
+
 import ChatList from "./screens/ChatList";
 import Settings from "./screens/Settings";
 import Chat from "./screens/Chat";
 import SignUp from "./screens/SignUp";
 import SignIn from "./screens/SignIn";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
-import { Provider, DefaultTheme } from "react-native-paper";
-import { AppRegistry, Platform } from 'react-native';
-
-AppRegistry.registerComponent('chat', () => App);
 
 
 
 
+
+const client = new ApolloClient({
+  uri: 'http://10.0.2.2:4000/graphql',
+  cache: new InMemoryCache(),
+});
 
 
 const Stack = createNativeStackNavigator();
@@ -29,7 +36,7 @@ const TabsNavigator = () => {
   useEffect(() => {
     const isLoggedIn = false;
     if (!isLoggedIn) {
-      navigation.navigate("SignUp")
+      navigation.navigate("SignIn")
 
     }
   }, []);
@@ -66,29 +73,39 @@ const theme = {
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Provider theme={theme}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Main"
-            component={TabsNavigator}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="Chat" component={Chat} />
-          <Stack.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{ presentation: "fullScreenModal" }}
-          />
-          <Stack.Screen
-            name="SignIn"
-            component={SignIn}
-            options={{ presentation: "fullScreenModal" }}
-          />
-        </Stack.Navigator>
-      </Provider>
-    </NavigationContainer>
+    <ApolloProvider client={client} >
+      <NavigationContainer>
+
+        <Provider theme={theme}>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Main"
+              component={TabsNavigator}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Chat" component={Chat} />
+            <Stack.Screen
+              name="SignUp"
+              component={SignUp}
+              options={{ presentation: "fullScreenModal" }}
+            />
+            <Stack.Screen
+              name="SignIn"
+              component={SignIn}
+              options={{ presentation: "fullScreenModal" }}
+            />
+          </Stack.Navigator>
+        </Provider>
+      </NavigationContainer >
+    </ApolloProvider>
+
   );
 };
 
+AppRegistry.registerComponent('Chat', () => App);
+
 export default App;
+
+
+
+
