@@ -9,12 +9,6 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const variables = {
-    name: name,
-    email: email,
-    password: password,
-  };
-
   const ADD_USER_MUTATION = gql`
     mutation ($name: String!, $email: String!, $password: String!) {
       createAUser(name: $name, email: $email, password: $password) {
@@ -74,7 +68,13 @@ const SignUp = () => {
         <Button
           mode="contained"
           onPress={() => {
-            createAUser({ variables: variables });
+            createAUser({
+              variables: {
+                name: name,
+                email: email,
+                password: password,
+              },
+            });
             navigation.popToTop();
           }}
         >

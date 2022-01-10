@@ -1,13 +1,14 @@
 
 import { Cat } from "./models/Cat";
 import { User } from "./models/User";
+import { UserInputError } from "apollo-server-core"
 
 
 export const resolvers = {
     Query: {
         hello: () => "hi",
         cats: async () => await Cat.find(),
-        users:async () => await User.find()
+        users: async () => await User.find()
     },
 
     Mutation: {
@@ -20,11 +21,29 @@ export const resolvers = {
         },
 
         createAUser: async (_, { name, email, password }) => {
-            const newAnimal = new User({ name, email, password })
-            await newAnimal.save()
-            console.log(newAnimal);
-            return newAnimal
-        }
+            const newUser = new User({ name, email, password })
+            await newUser.save()
+            console.log(newUser);
+            return newUser
+        },
+
+        loginControl: async (_, { email, password }) => {
+
+            const newUser = await User.findOne({ email });
+
+            if (!newUser) {
+
+                throw new UserInputError('User not found');
+
+            }
+
+            if (password !== newUser.password) {
+                throw new UserInputError("Password_incorrect");
+
+            }
+
+            return newUser
+        },
     }
 }
 

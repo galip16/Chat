@@ -21,12 +21,20 @@ type User {
     password:String!
 }
 
+type StatusCode {
+    status:Boolean
+}
+
 type Mutation {
     createCat(name:String!):Cat!
     createAUser( 
         name:String!
         email:String!
-        password:String!) : User
+        password:String!) : User!
+
+    loginControl(
+        email:String!
+        password:String!) :User!
 }
 
 

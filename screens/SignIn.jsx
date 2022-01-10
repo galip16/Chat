@@ -2,38 +2,42 @@ import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { TextInput, Button, Subheading } from "react-native-paper";
 import { useNavigation } from "@react-navigation/core";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, gql, useMutation } from "@apollo/client";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigation = useNavigation();
-
-  const handleSignIn = async () => {};
-
-  const CHATS_QUERY = gql`
-    {
-      users {
+  const CHECK_USER = gql`
+    mutation ($email: String!, $password: String!) {
+      loginControl(email: $email, password: $password) {
         name
-        email
-        id
-        password
       }
     }
   `;
 
-  const { loading, error, data } = useQuery(CHATS_QUERY);
+  const [loginControl, { data, loading, error }] = useMutation(CHECK_USER, {
+    variables: {
+      email: email,
+      password: password,
+    },
+    onCompleted: (data) =>  navigation.popToTop()
+  });
+
+  const navigation = useNavigation();
 
   if (loading) return <Text>Still Loading</Text>;
-  if (error) return <Text>{error.message}</Text>;
-  console.log("---------------------");
-  console.log(data.users[0].email);
-  console.log(data.users[0].password);
-
+  // if (error) return <Text>{error.message}</Text>;
 
   return (
     <View style={{ margin: 16 }}>
+      {!!error && (
+        <Subheading
+          style={{ color: "red", textAlign: "center", marginBottom: 16 }}
+        >
+          {error.message}
+        </Subheading>
+      )}
       <TextInput
         label="Email"
         style={{ marginTop: 12 }}
@@ -57,7 +61,16 @@ const SignIn = () => {
         <Button compact onPress={() => navigation.navigate("SignUp")}>
           Sign Up
         </Button>
-        <Button mode="contained" onPress={() => handleSignIn()}>
+        <Button
+          mode="contained"
+          onPress={(e) => {
+            e.preventDefault();
+            loginControl();
+
+            // navigation.popToTop();
+  
+          }}
+        >
           Sign In
         </Button>
       </View>
